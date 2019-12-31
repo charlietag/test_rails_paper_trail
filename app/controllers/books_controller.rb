@@ -7,6 +7,28 @@ class BooksController < ApplicationController
     @books = Book.all
   end
 
+  # GET /books/destroyed
+  # GET /books/destroyed.json
+  def destroyed
+    # This would never get record , because it's really been deleted...
+    #@books = Book.joins(:audits).where( audits: {action: 'destroy'})
+
+    # @books.class.name #->  ActiveRecord::Relation
+    # @books.name       #->  Audited::Audit
+    #
+    # Still - better works with soft delete (discard), or this will cause record confusion
+    #   ex. (below statement) Book id : 11 ---> show last history of record 11 (only destroy action)
+    #@books = Audited::Audit.where( auditable_type: "Book").order(auditable_id: 'asc')
+    @books = PaperTrail::Version.where( event: 'destroy', item_type: "Book").order(item_id: 'asc')
+
+    # Still - better works with soft delete (discard), or this will cause record confusion
+    #   ex. (below statement) Book id : 11 ---> show all history including CRUD
+    #@books = Audited::Audit.where( auditable_type: "Book").order(auditable_id: 'asc')
+
+    #render plain: @books.inspect
+    render :index
+  end
+
   # GET /books/1
   # GET /books/1.json
   def show

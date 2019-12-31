@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
-  resources :books
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :books do
+    get 'destroyed', on: :collection
+  end
+  resources :versions, only: []  do
+    patch 'rollback', on: :member
+  end
 end

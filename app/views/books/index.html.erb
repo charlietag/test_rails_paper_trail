@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Books</h1>
+<h1><%= link_to 'Books', books_path %> | <%= link_to 'Deleted records', destroyed_books_path %></h1>
 
 <table>
   <thead>
@@ -8,21 +8,41 @@
       <th>Name</th>
       <th>Author</th>
       <th>Year</th>
+      <th>Versions</th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
+  <% if @books.name == "Book" %>
     <% @books.each do |book| %>
       <tr>
         <td><%= book.name %></td>
         <td><%= book.author %></td>
         <td><%= book.year %></td>
+        <td><%= book.versions.count %></td>
         <td><%= link_to 'Show', book %></td>
         <td><%= link_to 'Edit', edit_book_path(book) %></td>
         <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
+  <% end %>
+
+  <% if @books.name == "PaperTrail::Version" %>
+    <% @books.each do |b| %>
+      <tr>
+        <%= tag.td b.item_type %>
+        <%= tag.td b.item_id %>
+        <%= tag.td b.event %>
+        <%= tag.td b.reify.name %>
+        <%= tag.td b.reify.author %>
+        <%= tag.td b.reify.year %>
+        <%= tag.td b.reify.created_at %>
+        <%= tag.td b.reify.updated_at %>
+        <%= tag.td link_to b.id, rollback_version_path(b), method: :patch, data: { confirm: "Rollback to '#{b.created_at}' ?" }   %>
+      </tr>
+    <% end %>
+  <% end %>
   </tbody>
 </table>
 

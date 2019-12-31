@@ -15,5 +15,39 @@
   <%= @book.year %>
 </p>
 
+<p>
+  <strong>Versions:</strong>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Year</th>
+        <th>CreatedAt</th>
+        <th>UpdatedAt</th>
+        <th>Roll Back To Version ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @book.versions.each do |b| %>
+      <% if ! b.object.nil? %>
+      <tr>
+        <%# tag.td YAML.load(b.object)["name"] %>
+        <%# tag.td YAML.load(b.object) %>
+        <%= tag.td b.reify.name %>
+        <%= tag.td b.reify.author %>
+        <%= tag.td b.reify.year %>
+        <%= tag.td b.reify.created_at %>
+        <%= tag.td b.reify.updated_at %>
+        <%= tag.td link_to b.id, rollback_version_path(b), method: :patch, data: { confirm: "Rollback to '#{b.reify.updated_at}' ?" }   %>
+      </tr>
+      <% end %>
+      <% end %>
+
+    </tbody>
+  </table>
+
+</p>
+
 <%= link_to 'Edit', edit_book_path(@book) %> |
 <%= link_to 'Back', books_path %>
