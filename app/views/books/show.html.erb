@@ -39,7 +39,7 @@
         <%= tag.td b.reify.year %>
         <%= tag.td b.reify.created_at %>
         <%= tag.td b.reify.updated_at %>
-        <%= tag.td link_to b.id, rollback_version_path(b), method: :patch, data: { confirm: "Rollback to '#{b.reify.updated_at}' ?" }   %>
+        <%= tag.td link_to b.index, rollback_version_path(b), method: :patch, data: { confirm: "Rollback to '#{b.reify.updated_at}' ?" }   %>
       </tr>
       <% end %>
       <% end %>
